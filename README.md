@@ -1,6 +1,6 @@
 # PAD2020_GenomicSequence_to_Species_Cluster
 
-This project is my very first GitHub upload :-D the project useses a dynamic programming approach to get the job done. will ultimatly have 4 functions acording to the following discription:
+This project is my very first GitHub upload :-D the project useses a dynamic programming approach to get the job done. will ultimatly have 4 functions according to the following discription:
 
 
 In this project you will implement a program that reads genomics sequences from a file and clusters them in a tree according to their pairwise evolutionary distances. 
