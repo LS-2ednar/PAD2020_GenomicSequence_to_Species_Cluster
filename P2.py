@@ -41,6 +41,48 @@ def scoring_matrix(seq1, seq2):
         matrix.append(line)
     return matrix
 
+def get_traceback_indices(matrix):
+    """
+    pathfinds from bottom right to top left by checking biggest avaiable value
+    around the momentary value.
+
+    Parameters
+    ----------
+    matrix : list of lists
+        Uses a scoring matrix to find the best scoring route back.
+
+    Returns
+    -------
+    list of tuples
+        The indices of the matirx which show the most scoring way from top 
+        left to bottom right.
+
+    """
+    n = len(matrix)-1
+    m = len(matrix[n])-1
+    tblist = list()
+    tblist.append((n,m))
+    while n != 0 and m !=0:
+    # check values to the left (vl), diagonal (vd) and top (vt) in compersion
+    # to momentary position
+        vl = matrix[n][m-1]
+        vd = matrix[n-1][m-1]
+        vt = matrix[n-1][m]
+        if max(vl,vd,vt) == vl:
+            # print(vl)
+            m -= 1
+            tblist.append((n,m))
+        elif max(vl,vd,vt) == vd:
+            # print(vd)
+            n -= 1
+            m -= 1
+            tblist.append((n,m))
+        else:
+            # print(vt)
+            n -= 1
+            tblist.append((n,m))
+    return tblist[::-1]
+
 def print_matrix(matrix):
     """
     Allows the print of matrices for easier visual interpretation

@@ -29,7 +29,7 @@ def ParseSeqFile(File):
             else:
                 break
     return returnlist
-  
+
 def is_dna(sequence):
     """
     Checks if the length of a string is 0 when all DNA bases are removed.
@@ -49,3 +49,4 @@ def is_dna(sequence):
         return True
     else:
         return False
+
