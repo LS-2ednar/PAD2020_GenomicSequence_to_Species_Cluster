@@ -2,19 +2,20 @@ import copy
 
 def scoring_matrix(seq1, seq2):
     """
-    generate a scoring matrix for two dna sequences
+    Takes two DNA sequences adn modives them. Creates a Scoring matrix and 
+    a Trackback matrix
 
     Parameters
     ----------
-    seq1 : String
-        First DNA sequence to allign.
-    seq2 : String
-        Second DNA sequence to allign.
+    seq1 : TYPE
+        DESCRIPTION.
+    seq2 : TYPE
+        DESCRIPTION.
 
     Returns
     -------
-    matrix : list of lists
-        containing the scoring for the DNA alignment.
+    Scoringmatrix, Tracbackmatrix, modified DNA-Sequence1 
+    and modified DNA-sequence2.
 
     """
     #increase sice of matrixices as needed
@@ -29,26 +30,28 @@ def scoring_matrix(seq1, seq2):
             matrix[-1].append(0.0)
     #copy matrix for traceback later
     tbmat = copy.deepcopy(matrix)
-    #prepare first row and first colum
+    #prepare first row and first colum of matrix and tbmatrix
     for n in range(len(matrix[0])):
         if n != 0:
             matrix[0][n] = n*-6
+            tbmat[0][n] = (0,n-1)
     for m in range(len(matrix)):
         if m != 0:
             matrix[m][0] = m*-6
+            tbmat[m][0] = (m-1,0)
             
-    #calculate scoring
+    #calculate scoring and fill tracebackmatrix with origin (tuples)
     for n in range(len(matrix)):
         for m in range(len(matrix[0])):
             if n != 0 and m != 0:
-                vl = matrix[n][m-1]-6
-                vt = matrix[n-1][m]-6
+                vl = matrix[n][m-1] - 6
+                vt = matrix[n-1][m] - 6
                 if seq1[n] == seq2[m]:
-                    vd = matrix[n-1][m-1]+5
+                    vd = matrix[n-1][m-1] + 5
                 else:
-                    vd = matrix[n-1][m-1]-2
+                    vd = matrix[n-1][m-1] - 2
                     
-                #which element will be inserted in matrix ???
+                #swap 0 scoring values
                 if max(vd,vl,vt) == vd:
                     matrix[n][m] = vd
                     tbmat[n][m] = (n-1,m-1)
@@ -60,12 +63,22 @@ def scoring_matrix(seq1, seq2):
                 else:
                     matrix[n][m] = vt 
                     tbmat[n][m] = (n,m-1)
-    ###                
-    # need a function to determine the max value in the matrix for  traceback
-    # tbmat will be used afterwards to do the alignment
-    ###
-    return(matrix)
+    retele = [matrix,tbmat,seq1,seq2]
+    return(retele)
 
+def find_mat_max_corr(matrix):
+    maxInLine = []
+    n = 0
+    m = 0
+    for line in matrix:
+        maxInLine.append(max(line))
+        for element in maxInLine:
+            while maxInLine[n] != max(maxInLine):
+                n += 1
+    while matrix[n][m] != max(matrix[n]):
+        m +=1   
+        
+    return(n,m)
 
 def print_matrix(matrix):
     """
