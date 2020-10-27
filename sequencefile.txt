@@ -10,5 +10,5 @@ Wrong__TESTSTESTEST
 >HuMaN  ACC C CA CTC A C C C A T A C AAA CCA A C A C C A CTCTCCACCTAATA TACAAA T AC CTC
 >Test2 ACC C CA CTC A C C C A T A C AAA CCA A C A C C A CTCTCCACCTAATA TACAAA T AC CTC
 
-Hardertests is there --> DNA
+Hardertest: Is there DNA >.O
 >WRONGDNA ThisIsNoDNAMuhahahaYouHaveBeenTricked
