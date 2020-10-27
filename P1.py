@@ -42,7 +42,7 @@ def is_dna(sequence):
     -------
     bool
         True if len(seq) == 0
-             else Flase 
+        otherwise Wrong 
 
     """
     if len(sequence.replace("A", "").replace("C", "").replace("G","").replace("T","")) == 0:
