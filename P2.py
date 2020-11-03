@@ -228,13 +228,12 @@ def AlignByDP(listOfTuples):
 
     """
     returndict = dict()
-    i = 0
-    while len(listOfTuples) > 1:
+    i = 0 
+    while len(listOfTuples) > i:
         i += 1
-        for j in range(1,len(listOfTuples)):
+        for j in range(i+1,len(listOfTuples)):
             print(j)
             score = scoring_matrix(listOfTuples[0][1], listOfTuples[j][1])
             aseqs = alline(score[0],score[1],score[2],score[3])
             returndict[(i,j)] = (aseqs[0],aseqs[1])
-        listOfTuples = listOfTuples[1:]
     return(returndict)
