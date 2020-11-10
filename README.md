@@ -11,3 +11,6 @@ P4 is a little bit more difficult.
 P2 is challenging. 
 Each part should be encapsulated in a module, with respective names
 P1.py, P2.py, P3.py, P4.py
+
+
+'ONE month for finalising and improveing the code'
