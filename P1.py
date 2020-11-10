@@ -50,3 +50,22 @@ def is_dna(sequence):
     else:
         return False
 
+def get_labels(returnlist):
+    """
+    Function to get all labels in order.
+
+    Parameters
+    ----------
+    returnlist : list of tuples
+        A list with labels and corisponding DNA sequences.
+
+    Returns
+    -------
+    labellist : list of labels
+        A list of labels.
+
+    """
+    labellist = []
+    for tuples in returnlist:
+        labellist.append(tuples[0])
+    return labellist
