@@ -1,3 +1,8 @@
+import os
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
+
 def ParseSeqFile(File):
     """
     Parses a Sequence File by selecting only correct datainput and returns a 

@@ -1,4 +1,8 @@
 import P1
+import os
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 def Cluster(dist_Matrix, listOflabels = get_labels(ParseSeqFile('sequencefile.txt'))):
     """

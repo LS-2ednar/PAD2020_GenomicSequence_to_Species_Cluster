@@ -1,5 +1,9 @@
 import random as r
 import time
+import os
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 def generate_dna(length, number):
     start = time.time()

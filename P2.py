@@ -1,6 +1,9 @@
-from P1 import is_dna, ParseSeqFile                                          
-        
+from P1 import is_dna, ParseSeqFile                                                  
 import copy
+import os
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 def scoring_matrix(seq1, seq2):
     """
