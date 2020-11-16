@@ -1,6 +1,8 @@
-from P1 import is_dna, ParseSeqFile                                                  
+from P1 import is_dna                                
 import copy
 import os
+
+#set current working directory to file location
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
@@ -127,7 +129,7 @@ def print_matrix(matrix):
         for line in matrix:
             pline =[]
             for element in line:
-                pline.append('%3.0i' % element)
+                pline.append('%3.3f' % element)
             print(pline)
         return(matrix)
     except:
@@ -219,24 +221,21 @@ def AlignByDP(listOfTuples):
     Alinges all DNA sequences in a list of tuples which eachother and returns
     a dictionary with the keys of the combined sequences and the corsiponding
     aligned to onanother DNA sequences
-
     Parameters
     ----------
     listOfTuples : A list of Tuples 
         First element is a label secnond a DNA-sequence.
-
     Returns
     -------
     A dictionary with tuples of the indices for the aligned dna sequences and the aligned dna sequnece as tuples.
-
     """
     returndict = dict()
-    i = 0 
+    i = 0
     while len(listOfTuples) > i:
-        i += 1
         for j in range(i+1,len(listOfTuples)):
-            print(j)
+            # print(j)
             score = scoring_matrix(listOfTuples[0][1], listOfTuples[j][1])
             aseqs = alline(score[0],score[1],score[2],score[3])
             returndict[(i,j)] = (aseqs[0],aseqs[1])
+        i += 1
     return(returndict)

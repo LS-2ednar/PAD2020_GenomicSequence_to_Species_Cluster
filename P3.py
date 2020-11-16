@@ -1,8 +1,12 @@
-import numpy as np
 import os
+
+#set current working directory to file location
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
+
+import numpy as np
+
 
 def howmany_sequences(listOfTuples):
     """
@@ -15,7 +19,7 @@ def howmany_sequences(listOfTuples):
 
     Returns
     -------
-        The number of sequence.
+    None.
 
     """
     pairs = 0
@@ -32,12 +36,12 @@ def init_Dist_Matrix(length):
 
     Parameters
     ----------
-    length : A Integer
-        A integer of length n.
+    length : TYPE
+        DESCRIPTION.
 
     Returns
     -------
-        Initialies a nXn dist matrix containing only zeros.
+    None.
 
     """
     dist_matrix = []
@@ -46,6 +50,8 @@ def init_Dist_Matrix(length):
         dist_matrix.append([])
         while len(dist_matrix[-1]) < length:
             dist_matrix[-1].append(0)
+    
+    # print_matrix(dist_matrix) #just for the visuals can be removed later
     return(dist_matrix)
 
 def calculate_distance(seq1,seq2):
@@ -54,22 +60,31 @@ def calculate_distance(seq1,seq2):
 
     Parameters
     ----------
-    seq1 : String
-        DNA Sequence 1.
-    seq2 : String
-        DNA Sequence 2.
+    seq1 : TYPE
+        DESCRIPTION.
+    seq2 : TYPE
+        DESCRIPTION.
 
     Returns
     -------
-        A caluclated and corrected distance value between seq1 and seq2. 
+    None.
 
     """
     mmcounter = 0 #mismatchcount
+    seqlen = 0
+    
     for i in range(len(seq1)):
-        if seq1[i] != seq2[i]:
-            mmcounter += 1
+        if seq1[i] or seq2[i] != '-':
+            seqlen += 1
+            if seq1[i] != seq2[i]:
+                mmcounter += 1
     p = (mmcounter/i)
     pcorr = -1*(3/4)*np.log(1-(4/3*p))
+    
+    #distance when biger 0.75
+    if pcorr >= 0.75:
+        pcorr = 30
+        
     return(pcorr)
     
 def ComputeDistMatrix(dictWithKeysAsTuplesAndTuplesAsElements):
@@ -79,21 +94,25 @@ def ComputeDistMatrix(dictWithKeysAsTuplesAndTuplesAsElements):
     Parameters
     ----------
     dictWithKeysAsTuplesAndTuplesAsElements : TYPE
-        A Dict with Tuples as Key and Tuples as Elements.
+        DESCRIPTION.
 
     Returns
     -------
-        distMatrix which is a list of values
+    None.
 
     """
     try:
         matrixdim = howmany_sequences(dictWithKeysAsTuplesAndTuplesAsElements)
         distMatrix = init_Dist_Matrix(matrixdim)
         for i in dictWithKeysAsTuplesAndTuplesAsElements.keys():
+            # print(i)
+            # print(i[0], i[1])
             seq = dictWithKeysAsTuplesAndTuplesAsElements[i]
+            # print(seq)
             distance = calculate_distance(seq[0],seq[1])
             distMatrix[i[0]-1][i[1]-1] = distance
             distMatrix[i[1]-1][i[0]-1] = distance
     except:
         'malformed input'
     return(distMatrix)
+

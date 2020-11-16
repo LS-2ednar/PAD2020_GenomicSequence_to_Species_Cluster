@@ -1,27 +1,31 @@
-import P1
 import os
+
+#set current working directory to file location
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
-def Cluster(dist_Matrix, listOflabels = get_labels(ParseSeqFile('sequencefile.txt'))):
+import P1
+
+
+def Cluster(dist_Matrix, listOflabels):
     """
     
 
     Parameters
     ----------
-    dist_Matrix : list of list of floats 
-        A list of with the genetical difference between two DNA sequences.
+    dist_Matrix : TYPE
+        DESCRIPTION.
 
     Returns
     -------
-        A strting with the clustered DNA Labels
+    None.
 
     """
     
     labels = listOflabels
     
-    while len(dist_Matrix) != 1:
+    while len(dist_Matrix) != 2:
         
         #find location of minium in matrix
         n,m = find_mat_min_but_0(dist_Matrix)
@@ -46,8 +50,8 @@ def Cluster(dist_Matrix, listOflabels = get_labels(ParseSeqFile('sequencefile.tx
         
         #correct new 0,0 value
         dist_Matrix[0][0] = 0
-        
     cluster = '(%s, %s)' % (labels[0],labels[1])
+    # print(cluster)
     return cluster
         
 def find_mat_min_but_0(matrix):
