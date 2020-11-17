@@ -234,7 +234,7 @@ def AlignByDP(listOfTuples):
     while len(listOfTuples) > i:
         for j in range(i+1,len(listOfTuples)):
             # print(j)
-            score = scoring_matrix(listOfTuples[0][1], listOfTuples[j][1])
+            score = scoring_matrix(listOfTuples[i][1], listOfTuples[j][1])
             aseqs = alline(score[0],score[1],score[2],score[3])
             returndict[(i,j)] = (aseqs[0],aseqs[1])
         i += 1
