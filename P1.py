@@ -1,4 +1,6 @@
 import os
+
+#set current working directory to file location
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
@@ -11,14 +13,14 @@ def ParseSeqFile(File):
     Parameters
     ----------
     File : Paht to sequence file in string format
-        For Parsing, the Data needs to start with > and there needs tobe 
+        For Parsing, the Data needs to start with > and there needs to be 
         whitespace between the species and the following dna sequence.
 
     Returns
     -------
-    returnlist : list of tuples with species and corrsiponing dna sequence
+    returnlist : list of tuples with species and corrsiponding dna sequence
     """
-    returnlist =list()
+    returnlist = list()
     try:
         file = open(File,'r')
     except:
@@ -54,10 +56,10 @@ def is_dna(sequence):
         return True
     else:
         return False
-
+    
 def get_labels(returnlist):
     """
-    Function to get all labels in order.
+    Function to get all labels in a order for later use
 
     Parameters
     ----------

@@ -1,4 +1,6 @@
 import os
+import P1
+from collections import defaultdict
 
 #set current working directory to file location
 abspath = os.path.abspath(__file__)
@@ -6,12 +8,12 @@ dname = os.path.dirname(abspath)
 os.chdir(dname)
 
 import P1
+import P2
 
 
 def Cluster(dist_Matrix, listOflabels):
     """
     
-
     Parameters
     ----------
     dist_Matrix : TYPE
@@ -25,40 +27,54 @@ def Cluster(dist_Matrix, listOflabels):
     
     labels = listOflabels
     
-    while len(dist_Matrix) != 2:
+    while len(dist_Matrix) > 1:
+        n,m = find_mat_min_but_0(dist_Matrix)        
         
-        #find location of minium in matrix
-        n,m = find_mat_min_but_0(dist_Matrix)
+        if n < m:
+            labels[n] = ('(%s, %s)' % (labels[n],labels[m]))
+            labels.pop(m)
+        else:
+            labels[m] = ('(%s, %s)' % (labels[m],labels[n]))
+            labels.pop(n)
         
-        #put togehter what needs to be together
-        labels[n] = (labels[n], labels[m])
-        labels.pop(m)
+        #remove unneeded colum
+        for i in range(len(dist_Matrix)):
+            dist_Matrix[i].pop(m)
         
-        #recalc of matrix
-        for element in range(len(dist_Matrix[0])):
-            dist_Matrix[1][element] = (dist_Matrix[1][element] + dist_Matrix[0][element])/2
+        #recalc second row and remove first row (n)
+        for j in range(1,len(dist_Matrix[0])):
+            dist_Matrix[1][j] = (dist_Matrix[0][j]+dist_Matrix[1][j])/2
         
-        for line in range(len(dist_Matrix)):
-            dist_Matrix[line][1] = (dist_Matrix[line][1] + dist_Matrix[line][0]) /2 
-        
-        #edit matrix size
-        #remove row
+        #remove first row
         dist_Matrix.pop(n)
-        #remove col
-        for line in dist_Matrix:
-            line.pop(m)
         
-        #correct new 0,0 value
-        dist_Matrix[0][0] = 0
-    cluster = '(%s, %s)' % (labels[0],labels[1])
-    # print(cluster)
-    return cluster
+        #element j j will be 0 again
+        for z in range(len(dist_Matrix)):
+            dist_Matrix[z][z] = 0
+    
+    returnstring = ''.join(labels)
+        
+    return returnstring
         
 def find_mat_min_but_0(matrix):
+    """
+    Fiinds the min value in a matrix which is not a 0 and returns 
+    its n m coordinates
+    Parameters
+    ----------
+    matrix : list of list 
+        distance matrix of two species.
+
+    Returns
+    -------
+    n and m coordinates.
+
+    """
     
     minInLine = []
     n = 0
     m = 0
+    
     #remove zeros for acual minmum location
     for line in matrix:
         i = 0
@@ -75,4 +91,13 @@ def find_mat_min_but_0(matrix):
                 n += 1
     while matrix[n][m] != min(matrix[n]):
         m +=1   
+    
+    #replace input values again with 0
+    for line in matrix:
+        i = 0
+        for element in line:
+            if element == 999999:
+                line[i] = 0
+            i += 1
+        
     return(n,m)
