@@ -101,18 +101,47 @@ def ComputeDistMatrix(dictWithKeysAsTuplesAndTuplesAsElements):
     None.
 
     """
-    try:
-        matrixdim = howmany_sequences(dictWithKeysAsTuplesAndTuplesAsElements)
-        distMatrix = init_Dist_Matrix(matrixdim)
-        for i in dictWithKeysAsTuplesAndTuplesAsElements.keys():
+    
+    # check if dictionary with keys as tuples containing integers and values as tuples containing strings
+    check = True 
+    #1 Check Input is dict
+    if isinstance(dictWithKeysAsTuplesAndTuplesAsElements, dict) == False:
+        check = False
+        
+    #2 Check are the keys and values tuples. Do the keys only contain integers and the vlaues only strings
+    i = 0
+    while len(dictWithKeysAsTuplesAndTuplesAsElements) > i:
+        #checking for keys and values as tuples
+        if isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.keys())[i], tuple) == False or isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.values())[i], tuple) == False:
+            check = False
+            break
+        #checking keys for integers
+        if isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.keys())[i][0], int) == False or isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.keys())[i][1], int) == False:
+            check = False
+            break
+        #checking values for strings
+        if isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.values())[i][0], str) == False or isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.values())[i][1], str) == False:
+            check = False
+            break
+        #increment the counter for while loop
+        i += 1
+    
+    #final evalauation if data is usable
+    if check == False:
+        return 'malformed input'
+    
+    
+    
+    matrixdim = howmany_sequences(dictWithKeysAsTuplesAndTuplesAsElements)
+    distMatrix = init_Dist_Matrix(matrixdim)
+    for i in dictWithKeysAsTuplesAndTuplesAsElements.keys():
             # print(i)
             # print(i[0], i[1])
-            seq = dictWithKeysAsTuplesAndTuplesAsElements[i]
+        seq = dictWithKeysAsTuplesAndTuplesAsElements[i]
             # print(seq)
-            distance = calculate_distance(seq[0],seq[1])
-            distMatrix[i[0]-1][i[1]-1] = distance
-            distMatrix[i[1]-1][i[0]-1] = distance
-    except:
-        'malformed input'
+        distance = calculate_distance(seq[0],seq[1])
+        distMatrix[i[0]-1][i[1]-1] = distance
+        distMatrix[i[1]-1][i[0]-1] = distance
+    
     return(distMatrix)
 

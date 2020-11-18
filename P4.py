@@ -7,9 +7,6 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
-import P1
-import P2
-
 
 def Cluster(dist_Matrix, listOflabels):
     """
@@ -53,8 +50,8 @@ def Cluster(dist_Matrix, listOflabels):
             dist_Matrix[z][z] = 0
     
     returnstring = ''.join(labels)
-        
-    return returnstring
+    
+    return returnstring   
         
 def find_mat_min_but_0(matrix):
     """
@@ -70,6 +67,27 @@ def find_mat_min_but_0(matrix):
     n and m coordinates.
 
     """
+    
+    # check if List of Tuples with strings and DNA
+    check = True
+    
+    i = 0
+    #check if it is a list of list
+    if isinstance(matrix, list) == False:
+        check = False
+    
+    while len(matrix) > i:
+        if isinstance(matrix[i], list) == False:
+            check = False
+        for n in range(len(matrix[i])):
+            if isinstance(matrix[i][n], float):
+                check = False
+           
+        i += 1
+        
+    if check == False:
+        return 'malformed input'
+    
     
     minInLine = []
     n = 0
