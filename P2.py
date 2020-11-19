@@ -7,6 +7,55 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
+
+def AlignByDP(listOfTuples):
+    """
+    Alinges all DNA sequences in a list of tuples which eachother and returns
+    a dictionary with the keys of the combined sequences and the corsiponding
+    aligned to onanother DNA sequences
+    Parameters
+    ----------
+    listOfTuples : A list of Tuples 
+        First element is a label secnond a DNA-sequence.
+    Returns
+    -------
+    A dictionary with tuples of the indices for the aligned dna sequences and the aligned dna sequnece as tuples.
+    """
+    # check if listOfTuples is a list of tuples with strings and DNA
+    check = True 
+    #1 Check Input is list
+    if isinstance(listOfTuples, list) == False:
+        check = False
+    
+    #Check Contents of list for being tuples with only strings
+    i = 0
+    while len(listOfTuples) > i:
+        #check if the contents of the list are tuples
+        if isinstance(listOfTuples[i], tuple) == False:
+            check = False
+            break
+        #check if the containts of the tuples are strings
+        elif isinstance(listOfTuples[i][0], str) == False or (isinstance(listOfTuples[i][1], str) == False or is_dna(listOfTuples[i][1]) == False):
+            check = False
+            break
+        i += 1
+        
+    #final evalauation if data is usable
+    if check == False:
+        raise TypeError ('malformed input')
+    
+    returndict = dict()
+    i = 0
+    while len(listOfTuples) > i:
+        for j in range(i+1,len(listOfTuples)):
+            # print(j)
+            # print(listOfTuples[i][1])
+            score = scoring_matrix(listOfTuples[i][1], listOfTuples[j][1])
+            aseqs = alline(score[0],score[1],score[2],score[3])
+            returndict[(i,j)] = (aseqs[0],aseqs[1])
+        i += 1
+    return(returndict)
+
 def scoring_matrix(seq1, seq2):
     """
     Takes two DNA sequences adn modives them. Creates a Scoring matrix and 
@@ -111,32 +160,6 @@ def find_mat_max_corr(matrix):
     # print(matrix[n][m]) # just here for now can be removed later :-D
     return(n,m)
             
-def print_matrix(matrix):
-    """
-    Allows the print of matrices for easier visual interpretation
-
-    Parameters
-    ----------
-    matrix : list of lists
-        A Matrix in form of a list of lists.
-
-    Returns
-    -------
-    Matrix.
-
-    """
-    try:
-        for line in matrix:
-            pline =[]
-            for element in line:
-                pline.append('%3.3f' % element)
-            print(pline)
-        return(matrix)
-    except:
-        for line in matrix:
-            print(line)
-    return(matrix)
-
 
 def alline(matrix, tbmat, seq1, seq2):
     """
@@ -216,51 +239,28 @@ def alline(matrix, tbmat, seq1, seq2):
     
     return(aseq1,aseq2)
 
-def AlignByDP(listOfTuples):
+def print_matrix(matrix):
     """
-    Alinges all DNA sequences in a list of tuples which eachother and returns
-    a dictionary with the keys of the combined sequences and the corsiponding
-    aligned to onanother DNA sequences
+    Allows the print of matrices for easier visual interpretation
+
     Parameters
     ----------
-    listOfTuples : A list of Tuples 
-        First element is a label secnond a DNA-sequence.
+    matrix : list of lists
+        A Matrix in form of a list of lists.
+
     Returns
     -------
-    A dictionary with tuples of the indices for the aligned dna sequences and the aligned dna sequnece as tuples.
+    Matrix.
+
     """
-    # check if listOfTuples is a list of tuples with strings and DNA
-    check = True 
-    #1 Check Input is list
-    if isinstance(listOfTuples, list) == False:
-        check = False
-    
-    #Check Contents of list for being tuples with only strings
-    i = 0
-    while len(listOfTuples) > i:
-        #check if the contents of the list are tuples
-        if isinstance(listOfTuples[i], tuple) == False:
-            check = False
-            break
-        #check if the containts of the tuples are strings
-        elif isinstance(listOfTuples[i][0], str) == False or (isinstance(listOfTuples[i][1], str) == False or is_dna(listOfTuples[i][1]) == False):
-            check = False
-            break
-        i += 1
-        
-    #final evalauation if data is usable
-    if check == False:
-        return 'malformed input'
-    
-    #--- new stuff ---#
-    returndict = dict()
-    i = 0
-    while len(listOfTuples) > i:
-        for j in range(i+1,len(listOfTuples)):
-            # print(j)
-            # print(listOfTuples[i][1])
-            score = scoring_matrix(listOfTuples[i][1], listOfTuples[j][1])
-            aseqs = alline(score[0],score[1],score[2],score[3])
-            returndict[(i,j)] = (aseqs[0],aseqs[1])
-        i += 1
-    return(returndict)
+    try:
+        for line in matrix:
+            pline =[]
+            for element in line:
+                pline.append('%3.3f' % element)
+            print(pline)
+        return(matrix)
+    except:
+        for line in matrix:
+            print(line)
+    return(matrix)

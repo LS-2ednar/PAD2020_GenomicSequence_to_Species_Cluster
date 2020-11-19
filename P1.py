@@ -5,6 +5,7 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
+
 def ParseSeqFile(File):
     """
     Parses a Sequence File by selecting only correct datainput and returns a 
@@ -20,6 +21,9 @@ def ParseSeqFile(File):
     -------
     returnlist : list of tuples with species and corrsiponding dna sequence
     """
+    if os.path.isfile(File) != True:
+        raise TypeError ('malformed input')
+    
     returnlist = list()
     try:
         file = open(File,'r')
@@ -35,6 +39,8 @@ def ParseSeqFile(File):
                 returnlist.append((label, dna))
             else:
                 break
+    if returnlist == []:
+        raise ValueError ('malformed input')
     return returnlist
 
 def is_dna(sequence):
