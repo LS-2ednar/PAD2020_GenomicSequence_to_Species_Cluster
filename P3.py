@@ -8,40 +8,42 @@ os.chdir(dname)
 import numpy as np
 
 
-def ComputeDistMatrix(dictWithKeysAsTuplesAndTuplesAsElements):
+def ComputeDistMatrix(dict_alignedSequences):
     """
-    
+    Useing a given dict with keys containing aligned sequences numbers 
+    (integers)and vlaues which are aligned DNA-sequences (strings) compute
+    a distance matrix as a list of lists of floats
 
     Parameters
     ----------
-    dictWithKeysAsTuplesAndTuplesAsElements : TYPE
+    dict_alignedSequences : dict{(int1,int2): (aSeq1, aSeq2)}
         DESCRIPTION.
 
     Returns
     -------
-    None.
+    dist_Matrix: list of lists of floats.
 
     """
     
     # check if dictionary with keys as tuples containing integers and values as tuples containing strings
     check = True 
     #1 Check Input is dict
-    if isinstance(dictWithKeysAsTuplesAndTuplesAsElements, dict) == False:
+    if isinstance(dict_alignedSequences, dict) == False:
         check = False
         
     #2 Check are the keys and values tuples. Do the keys only contain integers and the vlaues only strings
     i = 0
-    while len(dictWithKeysAsTuplesAndTuplesAsElements) > i:
+    while len(dict_alignedSequences) > i:
         #checking for keys and values as tuples
-        if isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.keys())[i], tuple) == False or isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.values())[i], tuple) == False:
+        if isinstance(list(dict_alignedSequences.keys())[i], tuple) == False or isinstance(list(dict_alignedSequences.values())[i], tuple) == False:
             check = False
             break
         #checking keys for integers
-        if isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.keys())[i][0], int) == False or isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.keys())[i][1], int) == False:
+        if isinstance(list(dict_alignedSequences.keys())[i][0], int) == False or isinstance(list(dict_alignedSequences.keys())[i][1], int) == False:
             check = False
             break
         #checking values for strings
-        if isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.values())[i][0], str) == False or isinstance(list(dictWithKeysAsTuplesAndTuplesAsElements.values())[i][1], str) == False:
+        if isinstance(list(dict_alignedSequences.values())[i][0], str) == False or isinstance(list(dict_alignedSequences.values())[i][1], str) == False:
             check = False
             break
         #increment the counter for while loop
@@ -51,11 +53,11 @@ def ComputeDistMatrix(dictWithKeysAsTuplesAndTuplesAsElements):
     if check == False:
         raise TypeError ('malformed input')
     
-    matrixdim = howmany_sequences(dictWithKeysAsTuplesAndTuplesAsElements)
+    matrixdim = howmany_sequences(dict_alignedSequences)
     distMatrix = init_Dist_Matrix(matrixdim)
-    for i in dictWithKeysAsTuplesAndTuplesAsElements.keys():
+    for i in dict_alignedSequences.keys():
             
-        seq = dictWithKeysAsTuplesAndTuplesAsElements[i]
+        seq = dict_alignedSequences[i]
             
         distance = calculate_distance(seq[0],seq[1])
         distMatrix[i[0]-1][i[1]-1] = distance
@@ -74,7 +76,8 @@ def howmany_sequences(listOfTuples):
 
     Returns
     -------
-    None.
+    k:  integer
+        Number of compared Sequences
 
     """
     pairs = 0
@@ -87,16 +90,15 @@ def howmany_sequences(listOfTuples):
 
 def init_Dist_Matrix(length):
     """
-    initialies a distance matrix containing notthing but 'X'
+    initialies a distance matrix containing notthing but 0.0
 
     Parameters
     ----------
-    length : TYPE
-        DESCRIPTION.
+    length : integer
 
     Returns
     -------
-    None.
+    list of lists of 0.0.
 
     """
     dist_matrix = []
@@ -115,28 +117,28 @@ def calculate_distance(seq1,seq2):
 
     Parameters
     ----------
-    seq1 : TYPE
-        DESCRIPTION.
-    seq2 : TYPE
-        DESCRIPTION.
+    seq1 : string
+        aligend DNA-sequence 1.
+    seq2 : string
+        aligend DNA-sequence 2.
 
     Returns
     -------
-    None.
-
+    pcorr: float
+        Calculated distance value.
     """
     mmcounter = 0 #mismatchcount
     seqlen = 0
     
     for i in range(len(seq1)):
-        if seq1[i] or seq2[i] != '-':
+        if (seq1[i] or seq2[i]) != '-':
             seqlen += 1
             if seq1[i] != seq2[i]:
                 mmcounter += 1
     p = (mmcounter/i)
     pcorr = -1*(3/4)*np.log(1-(4/3*p))
     
-    #distance when biger 0.75
+    #distance when pcorr is biger then 0.75
     if pcorr >= 0.75:
         pcorr = float(30)
         

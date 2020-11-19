@@ -11,12 +11,11 @@ def Cluster(dist_Matrix, listOflabels):
     
     Parameters
     ----------
-    dist_Matrix : TYPE
-        DESCRIPTION.
+    dist_Matrix : list of list of floats
 
     Returns
     -------
-    None.
+    returnstring: by parentesis clustered labels
 
     """
     
@@ -85,7 +84,10 @@ def find_mat_min_but_0(matrix):
 
     Returns
     -------
-    n and m coordinates.
+    n: integer
+        row number indix of minimum which is not 0
+    m: integer
+        column number index of minimum which is not 0
 
     """
     

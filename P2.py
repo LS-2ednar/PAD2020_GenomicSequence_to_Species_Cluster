@@ -21,7 +21,7 @@ def AlignByDP(listOfTuples):
     -------
     A dictionary with tuples of the indices for the aligned dna sequences and the aligned dna sequnece as tuples.
     """
-    # check if listOfTuples is a list of tuples with strings and DNA
+    #Check if listOfTuples is a list of tuples with strings and DNA
     check = True 
     #1 Check Input is list
     if isinstance(listOfTuples, list) == False:
@@ -44,22 +44,23 @@ def AlignByDP(listOfTuples):
     if check == False:
         raise TypeError ('malformed input')
     
+    #initialize returndict
     returndict = dict()
     i = 0
+    #loops true the listOfTuples and get scores and aligned sequences
     while len(listOfTuples) > i:
         for j in range(i+1,len(listOfTuples)):
-            # print(j)
-            # print(listOfTuples[i][1])
             score = scoring_matrix(listOfTuples[i][1], listOfTuples[j][1])
             aseqs = alline(score[0],score[1],score[2],score[3])
             returndict[(i,j)] = (aseqs[0],aseqs[1])
+            
         i += 1
     return(returndict)
 
 def scoring_matrix(seq1, seq2):
     """
-    Takes two DNA sequences adn modives them. Creates a Scoring matrix and 
-    a Trackback matrix
+    Takes two DNA sequences and creates a corsiponding a scoring and a 
+    trackback matrix, aswell as modified DNA-Sequence1 and DNA-Sequence2
 
     Parameters
     ----------
@@ -70,19 +71,24 @@ def scoring_matrix(seq1, seq2):
 
     Returns
     -------
-    A list containging for elements 1.Scoringmatrix, 2.Tracbackmatrix, 
-    3. modified DNA-Sequence1 and 4. modified DNA-sequence2.
+    retele: list of (Scoringmatrix, Tracbackmatrix, modified DNA-Sequence 1 
+                     and modified DNA-Sequence 2)
+        Discription:
+        Scoringmatrix (list of list of integers)
+        Tracbackmatrix(list of list of strings) 
+        modified DNA-Sequence1 (string)
+        modified DNA-sequence2 (string).
 
     """
     try:
         is_dna(seq1)
     except:
-        'Wrong format'
+        raise TypeError ('wrong format')
             
     try:
         is_dna(seq2)
     except:
-        'Worng format'
+        raise TypeError ('wrong format')
         
     #increase sice of matrixices as needed for scoring matrix
     seq1 = '0' + seq1
@@ -94,7 +100,7 @@ def scoring_matrix(seq1, seq2):
         matrix.append([])
         while len(matrix[-1]) < len(seq2):
             matrix[-1].append(0)
-    #copy matrix for traceback later
+    #copy matrix for traceback later and replace [0][0] with letter E
     tbmat = copy.deepcopy(matrix)
     tbmat[0][0] = 'E'
     #prepare first row and first colum of matrix and tbmatrix
@@ -107,7 +113,7 @@ def scoring_matrix(seq1, seq2):
             matrix[m][0] = m*-6
             tbmat[m][0] = 'T'
             
-    #calculate scoring and fill tracebackmatrix with origin (tuples)
+    #calculate scoring for scoring matrix and get origin in tracback matrix
     for n in range(len(matrix)):
         for m in range(len(matrix[0])):
             if n != 0 and m != 0:
@@ -118,7 +124,7 @@ def scoring_matrix(seq1, seq2):
                 else:
                     vd = matrix[n-1][m-1] - 2
                     
-                #swap 0 scoring values
+                #fill scoring values and tracback origin
                 if max(vd,vl,vt) == vd:
                     matrix[n][m] = vd
                     tbmat[n][m] = 'D'
@@ -130,47 +136,52 @@ def scoring_matrix(seq1, seq2):
                 else:
                     matrix[n][m] = vt 
                     tbmat[n][m] = 'T'
-                    
+    
+    #put returnelements in a list
     retele = [matrix,tbmat,seq1,seq2]
     return(retele)
 
 def find_mat_max_corr(matrix):
     """
-    Find the indices of the possiton of the max value inside of a matrix
-    Parameters
+    Find the indices of the max value inside of a scoring matrix 
+    Parameters. 
     ----------
-    matrix : list of lists
-        Matrix in form of a list of lists.
+    matrix : list of lists of numbers
+        Scoring matrix with numbers.
 
     Returns
     -------
-    Indices n and m as tuple.
+    n & m: Indices n and m.
 
     """
+    #create an empty list for all max values in all lines
     maxInLine = []
     n = 0
     m = 0
+    
+    #fill the maxInLine lsit with max values of each line
     for line in matrix:
         maxInLine.append(max(line))
+        #get n index for the max in the matrix 
         for element in maxInLine:
             while maxInLine[n] != max(maxInLine):
                 n += 1
+    #get the m index
     while matrix[n][m] != max(matrix[n]):
         m +=1   
-    # print(matrix[n][m]) # just here for now can be removed later :-D
     return(n,m)
             
 
 def alline(matrix, tbmat, seq1, seq2):
     """
-    Allines two sequences to oneanother by checking the values useing a scoring
-    and traceback matrix.
+    Allines two sequences (seq1 and seq2) to oneanother by checking the values 
+    useing a scoring and traceback matrix.
 
     Parameters
     ----------
-    matrix : list of lists
+    matrix : list of lists of integers
         Soring matrix.
-    tbmat : list of lists
+    tbmat : list of lists of strings
         Traceback matrix.
     seq1 : string
         DNA-sequence 1 to aligne.
@@ -179,69 +190,70 @@ def alline(matrix, tbmat, seq1, seq2):
 
     Returns
     -------
-    tuple of aligned sequences 1 and 2.
+    aseq1 & aseq2: two strings of aligned sequences 1 and 2.
 
     """
     
+    #initialize aligned sequences 1 and 2
+    aseq1 = []
+    aseq2 = []
+    
+    #find starting location to begin traceback
     start = find_mat_max_corr(matrix)
     n = start[0]
     m = start[1]
-    aseq1 = []
-    aseq2 = []
-    #start traceback
+    
+    #ensure final alignement
+    #comapre n with len seq1 without 0
+    nleft = len(seq1)-n-1
+    #compare m with len seq2 without 0
+    mleft = len(seq2)-m-1
+    
+    #traceback and writing the characters of the dna sequeces in lists 
     while tbmat[n][m] != 'E':
         if tbmat[n][m] == 'D':
-            # print('D')
             aseq1.append(seq1[n])
             aseq2.append(seq2[m])
             n -= 1
             m -= 1
             
         elif tbmat[n][m] == 'L':
-            # print('L')
             aseq1.append('-')
             aseq2.append(seq2[m])
             n  = n
             m -= 1
             
         else:
-            # print('T')
             aseq1.append(seq1[n])
             aseq2.append('-')
             n -= 1
             m  = m
-                  
-    #remove 0 from seq1 and seq2 for to complet alignment
-    seq1 = seq1.replace('0', '')
-    seq2 = seq2.replace('0', '')
     
-    #append missing values        
-    if len(seq1) > len(aseq1):
-        while len(seq1) > len(aseq1):
-            aseq1.append(seq1[len(seq1)-(len(seq1)-len(aseq1))])
-            
-            
-    if len(seq2) > len(aseq2):
-        while len(seq2) > len(aseq2):
-            aseq2.append(seq2[len(seq2)-(len(seq2)-len(aseq2))])    
-     
-    
-    #check if there are maybe missing elements in the front
-    if len(aseq1) < len(aseq2):
-        while len(aseq1) < len(aseq2):
-            aseq1.append('-')
-    elif len(aseq1) > len(aseq2): 
-        while len(aseq1) > len(aseq2):
-            aseq2.append('-')
-     #formating for return
+    #formating for return lists become strings
     aseq1 = ''.join(aseq1)[::-1]
     aseq2 = ''.join(aseq2)[::-1]                                 
     
+    #add missing values to aseq1 and aseq2 due to not starting traceback 
+    #in bottom rihgt corner
+    for i in range(nleft):
+        aseq1 = aseq1+(seq1[::-1][i])
+        
+    for j in range(mleft):
+        aseq2 = aseq2+(seq2[::-1][j])
+    
+    #adjusting of aseq1 and aseq2 to have equal length
+    while len(aseq1) > len(aseq2):
+        aseq2 = aseq2+'-'
+        
+    while len(aseq1) < len(aseq2):
+        aseq1 = aseq1+'-'
+        
     return(aseq1,aseq2)
 
 def print_matrix(matrix):
     """
-    Allows the print of matrices for easier visual interpretation
+    Trys to print each line of a matrix in a nice format otherwise it prints 
+    each line
 
     Parameters
     ----------
@@ -250,7 +262,7 @@ def print_matrix(matrix):
 
     Returns
     -------
-    Matrix.
+    matrix: the given input Matrix
 
     """
     try:

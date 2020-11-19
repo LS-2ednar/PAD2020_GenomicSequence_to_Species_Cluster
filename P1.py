@@ -21,6 +21,7 @@ def ParseSeqFile(File):
     -------
     returnlist : list of tuples with species and corrsiponding dna sequence
     """
+    #input checks
     if os.path.isfile(File) != True:
         raise TypeError ('malformed input')
     
@@ -29,19 +30,27 @@ def ParseSeqFile(File):
         file = open(File,'r')
     except:
         return 'malformed input'
+    
+    #converting file to wished output
     for line in file:
+        #first check if the line follows the wished format
         if line[0] == ">":
+            #creating a list and removeing unwanted > and \n
             partslist = line.strip(">").strip("\n").split()
+            #catching label and format to capital letters
             label = partslist[0].upper()
+            #generating dna and format to captial letters
             dnaparts = partslist[1:]
             dna = ''.join(dnaparts).upper()
+            #check if DNA is acual DNA
             if is_dna(dna) == True:
                 returnlist.append((label, dna))
             else:
                 break
+    #checking output if it is a empty list raise ValueError
     if returnlist == []:
         raise ValueError ('malformed input')
-    return returnlist
+    return (returnlist)
 
 def is_dna(sequence):
     """
@@ -55,9 +64,11 @@ def is_dna(sequence):
     -------
     bool
         True if len(seq) == 0
-        otherwise Wrong 
+        otherwise False 
 
     """
+    #ensure that the given sequence is uppercase
+    sequence = sequence.upper()
     if len(sequence.replace("A", "").replace("C", "").replace("G","").replace("T","")) == 0:
         return True
     else:
@@ -65,7 +76,7 @@ def is_dna(sequence):
     
 def get_labels(returnlist):
     """
-    Function to get all labels in a order for later use
+    Function to get all labels in a order for later use in P4
 
     Parameters
     ----------
@@ -79,6 +90,7 @@ def get_labels(returnlist):
 
     """
     labellist = []
+    #gets labels of the tuples 
     for tuples in returnlist:
         labellist.append(tuples[0])
-    return labellist
+    return (labellist)
