@@ -58,10 +58,10 @@ def ComputeDistMatrix(dict_alignedSequences):
     for i in dict_alignedSequences.keys():
             
         seq = dict_alignedSequences[i]
-            
+        
         distance = calculate_distance(seq[0],seq[1])
-        distMatrix[i[0]-1][i[1]-1] = distance
-        distMatrix[i[1]-1][i[0]-1] = distance
+        distMatrix[i[0]][i[1]] = distance
+        distMatrix[i[1]][i[0]] = distance
     
     return(distMatrix)
 
@@ -131,16 +131,15 @@ def calculate_distance(seq1,seq2):
     seqlen = 0
     
     for i in range(len(seq1)):
-        if (seq1[i] or seq2[i]) != '-':
+        if seq1[i]!='-' and seq2[i]!='-':
             seqlen += 1
             if seq1[i] != seq2[i]:
                 mmcounter += 1
-    p = (mmcounter/i)
-    pcorr = -1*(3/4)*np.log(1-(4/3*p))
-    
-    #distance when pcorr is biger then 0.75
-    if pcorr >= 0.75:
+    p = (mmcounter/seqlen)
+    if p >= 0.75:
         pcorr = float(30)
-        
+    else:
+        pcorr = (-3/4)*np.log(1-((4/3)*p))
+    
     return(pcorr)
     

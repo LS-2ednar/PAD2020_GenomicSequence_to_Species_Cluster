@@ -19,7 +19,8 @@ def AlignByDP(listOfTuples):
         First element is a label secnond a DNA-sequence.
     Returns
     -------
-    A dictionary with tuples of the indices for the aligned dna sequences and the aligned dna sequnece as tuples.
+    A dictionary with tuples of the indices for the aligned dna sequences and
+    the aligned dna sequnece as tuples.
     """
     #Check if listOfTuples is a list of tuples with strings and DNA
     check = True 
@@ -83,12 +84,12 @@ def scoring_matrix(seq1, seq2):
     try:
         is_dna(seq1)
     except:
-        raise TypeError ('wrong format')
+        raise TypeError ('malformed input')
             
     try:
         is_dna(seq2)
     except:
-        raise TypeError ('wrong format')
+        raise TypeError ('malformed input')
         
     #increase sice of matrixices as needed for scoring matrix
     seq1 = '0' + seq1
@@ -140,36 +141,6 @@ def scoring_matrix(seq1, seq2):
     #put returnelements in a list
     retele = [matrix,tbmat,seq1,seq2]
     return(retele)
-
-def find_mat_max_corr(matrix):
-    """
-    Find the indices of the max value inside of a scoring matrix 
-    Parameters. 
-    ----------
-    matrix : list of lists of numbers
-        Scoring matrix with numbers.
-
-    Returns
-    -------
-    n & m: Indices n and m.
-
-    """
-    #create an empty list for all max values in all lines
-    maxInLine = []
-    n = 0
-    m = 0
-    
-    #fill the maxInLine lsit with max values of each line
-    for line in matrix:
-        maxInLine.append(max(line))
-        #get n index for the max in the matrix 
-        for element in maxInLine:
-            while maxInLine[n] != max(maxInLine):
-                n += 1
-    #get the m index
-    while matrix[n][m] != max(matrix[n]):
-        m +=1   
-    return(n,m)
             
 
 def alline(matrix, tbmat, seq1, seq2):
@@ -198,16 +169,9 @@ def alline(matrix, tbmat, seq1, seq2):
     aseq1 = []
     aseq2 = []
     
-    #find starting location to begin traceback
-    start = find_mat_max_corr(matrix)
-    n = start[0]
-    m = start[1]
-    
-    #ensure final alignement
-    #comapre n with len seq1 without 0
-    nleft = len(seq1)-n-1
-    #compare m with len seq2 without 0
-    mleft = len(seq2)-m-1
+    n = len(seq1)-1
+    m = len(seq2)-1
+   
     
     #traceback and writing the characters of the dna sequeces in lists 
     while tbmat[n][m] != 'E':
@@ -229,31 +193,16 @@ def alline(matrix, tbmat, seq1, seq2):
             n -= 1
             m  = m
     
-    #formating for return lists become strings
+    #formating for return -> lists become strings
     aseq1 = ''.join(aseq1)[::-1]
     aseq2 = ''.join(aseq2)[::-1]                                 
-    
-    #add missing values to aseq1 and aseq2 due to not starting traceback 
-    #in bottom rihgt corner
-    for i in range(nleft):
-        aseq1 = aseq1+(seq1[::-1][i])
-        
-    for j in range(mleft):
-        aseq2 = aseq2+(seq2[::-1][j])
-    
-    #adjusting of aseq1 and aseq2 to have equal length
-    while len(aseq1) > len(aseq2):
-        aseq2 = aseq2+'-'
-        
-    while len(aseq1) < len(aseq2):
-        aseq1 = aseq1+'-'
         
     return(aseq1,aseq2)
 
 def print_matrix(matrix):
     """
     Trys to print each line of a matrix in a nice format otherwise it prints 
-    each line
+    each line (utility function)
 
     Parameters
     ----------

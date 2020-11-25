@@ -8,10 +8,13 @@ os.chdir(dname)
 
 def Cluster(dist_Matrix, listOflabels):
     """
-    
+    Cluster the different Labels are put in a binary tree in string format 
+    based on distance Matrix
     Parameters
     ----------
     dist_Matrix : list of list of floats
+    
+    listOflabels : list of strings
 
     Returns
     -------
