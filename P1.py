@@ -45,8 +45,7 @@ def ParseSeqFile(File):
             #check if DNA is acual DNA
             if is_dna(dna) == True:
                 returnlist.append((label, dna))
-            else:
-                break
+            
     #checking output if it is a empty list raise ValueError
     if returnlist == []:
         raise ValueError ('malformed input')
