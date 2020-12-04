@@ -172,7 +172,6 @@ def alline(matrix, tbmat, seq1, seq2):
     n = len(seq1)-1
     m = len(seq2)-1
    
-    
     #traceback and writing the characters of the dna sequeces in lists 
     while tbmat[n][m] != 'E':
         if tbmat[n][m] == 'D':
@@ -225,3 +224,10 @@ def print_matrix(matrix):
         for line in matrix:
             print(line)
     return(matrix)
+
+"""
+Test
+"""
+import P1
+a = P1.ParseSeqFile('sequencefile.txt')  
+AlignByDP(a)

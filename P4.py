@@ -1,3 +1,4 @@
+from collections import defaultdict
 import os
 
 #set current working directory to file location
@@ -5,29 +6,30 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
-
-def Cluster(dist_Matrix, listOflabels):
+def Cluster(dist_Matrix, labels):
     """
     Cluster the different Labels are put in a binary tree in string format 
     based on distance Matrix
     Parameters
     ----------
-    dist_Matrix : list of list of floats
+    dist_Matrix : list of lists of floats
     
-    listOflabels : list of strings
+    labels : list of strings
 
     Returns
     -------
     returnstring: by parentesis clustered labels
 
     """
-    
     # check if List of Tuples with strings and DNA
     check = True
     
     i = 0
     #check if it is a list of list
     if isinstance(dist_Matrix, list) == False:
+        check = False
+    
+    if len(dist_Matrix) != len(labels):
         check = False
         
     while len(dist_Matrix) > i:
@@ -44,83 +46,109 @@ def Cluster(dist_Matrix, listOflabels):
     if check == False:
         raise TypeError ('malformed input')
     
+    #initialize a 2d dict with keys as labels and  
+    ClusterDict = defaultdict(dict)
+    for n in range(len(labels)):
+        for m in range(len(labels)):
+            ClusterDict[labels[n]][labels[m]] = dist_Matrix[n][m]
+            
+    #Cluster the binary tree together
+    while len(ClusterDict)>2:
+        #find minimum
+        # print(len(ClusterDict))
+        
+        n,m = dict_min(ClusterDict)
+        #recalculate Vlaues
+        recalc_dict(ClusterDict,n,m)
     
-    labels = listOflabels
+    retlist = []
+    for key in ClusterDict.keys():
+        retlist.append(key)
     
-    while len(dist_Matrix) > 1:
-        n,m = find_mat_min_but_0(dist_Matrix)        
-        
-        if n < m:
-            labels[n] = ('(%s, %s)' % (labels[n],labels[m]))
-            labels.pop(m)
-        else:
-            labels[m] = ('(%s, %s)' % (labels[m],labels[n]))
-            labels.pop(n)
-        
-        #remove unneeded colum
-        for i in range(len(dist_Matrix)):
-            dist_Matrix[i].pop(m)
-        
-        #recalc second row and remove first row (n)
-        for j in range(1,len(dist_Matrix[0])):
-            dist_Matrix[1][j] = (dist_Matrix[0][j]+dist_Matrix[1][j])/2
-        
-        #remove first row
-        dist_Matrix.pop(n)
-        
-        #element j j will be 0 again
-        for z in range(len(dist_Matrix)):
-            dist_Matrix[z][z] = 0
-    
-    returnstring = ''.join(labels)
+    #combin all parts in the returnlist to one final string
+    returnstring = ''.join('(%s,%s)' % (retlist[0],retlist[1]))
     
     return returnstring   
-        
-def find_mat_min_but_0(matrix):
+
+def dict_min(ClusterDict):
     """
-    Fiinds the min value in a matrix which is not a 0 and returns 
-    its n m coordinates
+    Returns the two labels which need to be connected with each other
     Parameters
     ----------
-    matrix : list of list 
-        distance matrix of two species.
+    ClusterDict : 2D dict containing the values of the ComputedDistMatrix
 
     Returns
     -------
-    n: integer
-        row number indix of minimum which is not 0
-    m: integer
-        column number index of minimum which is not 0
+    n : String
+
+    m : String
 
     """
+    #initialize artificial minima
+    minima = float('inf')
     
-    minInLine = []
-    n = 0
-    m = 0
-    
-    #remove zeros for acual minmum location
-    for line in matrix:
-        i = 0
-        for element in line:
-            if element == float(0):
-                line[i] = 999999
-            i += 1
-    
-    #finding mimum
-    for line in matrix:
-        minInLine.append(min(line))
-        for element in minInLine:
-            while minInLine[n] != min(minInLine):
-                n += 1
-    while matrix[n][m] != min(matrix[n]):
-        m +=1   
-    
-    #replace input values again with 0
-    for line in matrix:
-        i = 0
-        for element in line:
-            if element == 999999:
-                line[i] = float(0)
-            i += 1
+    if len(ClusterDict.keys()) != 2:
+        #test first key
+        for k1 in ClusterDict:
+            
+            #test second key
+            for k2 in ClusterDict[k1]:
+                
+                #check if the value is smaller current minima
+                if ClusterDict[k1][k2] < minima and k1 !=k2:
+                    #define new minimum and keys n and m
+                    minima = ClusterDict[k1][k2]
+                    n = k1
+                    m = k2
+                    
+    return n,m
+
+def recalc_dict(ClusterDict,n,m):
+    """
+    Returns the recalucated clusterdict
+    Parameters
+    ----------
+    ClusterDict     : 2D dict containing the values of a Matrix with Corrisponding Keys
         
-    return(n,m)
+    n & m           : keys to the ClusterDict where n is the primary and m the secondary key
+    Returns
+    ------- 
+    newClusterDict  : recalculated ClusterDict
+
+    """ 
+    #generate new key
+    newKey = '(%s,%s)' % (n,m)
+    
+    # Get values to recalc distance
+    nV = ClusterDict[n] 
+    mV = ClusterDict[m]
+    rV = {}
+    
+    rV[newKey] = float(0)
+    
+    # calculate the new values
+    if n in ClusterDict.keys() and m in ClusterDict.keys():
+        for key in nV:
+            if key != n and key != m:
+                rV[key] = (nV[key] + mV[key])/2
+
+    #add new calculated dict 
+    ClusterDict[newKey] = rV
+    
+    #remove unwanted keys
+    del ClusterDict[n]
+    del ClusterDict[m]
+    
+    #removeing unwanted subkeys
+    for key in ClusterDict:
+        if n in ClusterDict[key].keys():
+            del ClusterDict[key][n]
+            
+        if m in ClusterDict[key].keys():
+            del ClusterDict[key][m]
+    
+    for key in ClusterDict:
+        if key != newKey:
+            ClusterDict[key][newKey] = ClusterDict[newKey][key]
+            
+    return ClusterDict 
