@@ -1,12 +1,5 @@
 from P1 import is_dna                                
 import copy
-import os
-
-#set current working directory to file location
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
-
 
 def AlignByDP(listOfTuples):
     """

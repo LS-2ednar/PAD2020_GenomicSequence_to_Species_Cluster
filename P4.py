@@ -1,10 +1,4 @@
 from collections import defaultdict
-import os
-
-#set current working directory to file location
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
 
 def Cluster(dist_Matrix, labels):
     """

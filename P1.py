@@ -1,11 +1,5 @@
 import os
 
-#set current working directory to file location
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
-
-
 def ParseSeqFile(File):
     """
     Parses a Sequence File by selecting only correct datainput and returns a 
@@ -33,18 +27,27 @@ def ParseSeqFile(File):
     
     #converting file to wished output
     for line in file:
+        if line[0] != ">" and len(line)!=1:
+            raise ValueError ('malformed input')
         #first check if the line follows the wished format
         if line[0] == ">":
             #creating a list and removeing unwanted > and \n
             partslist = line.strip(">").strip("\n").split()
+            #check partslist size if 1 malformed input
+            if partslist == []:
+                raise ValueError ('malformed input')
             #catching label and format to capital letters
             label = partslist[0].upper()
             #generating dna and format to captial letters
             dnaparts = partslist[1:]
             dna = ''.join(dnaparts).upper()
-            #check if DNA is acual DNA
-            if is_dna(dna) == True:
-                returnlist.append((label, dna))
+            returnlist.append((label, dna))
+        else:
+            raise ValueError ('malformed input')
+        #check if DNA is acual DNA
+        if is_dna(dna) != True:
+            raise TypeError ('malformed input')
+            
             
     #checking output if it is a empty list raise ValueError
     if returnlist == []:

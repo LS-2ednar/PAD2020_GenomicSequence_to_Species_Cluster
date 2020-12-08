@@ -1,12 +1,4 @@
-import os
-
-#set current working directory to file location
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
-
 import numpy as np
-
 
 def ComputeDistMatrix(dict_alignedSequences):
     """
