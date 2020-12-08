@@ -18,7 +18,6 @@ def Cluster(dist_Matrix, labels):
     # check if List of Tuples with strings and DNA
     check = True
     
-    i = 0
     #check if it is a list of list
     if isinstance(dist_Matrix, list) == False:
         check = False
@@ -27,6 +26,7 @@ def Cluster(dist_Matrix, labels):
     if len(dist_Matrix) != len(labels):
         check = False
     #check every entry in the distmatrix
+    i = 0 # initialize counter
     while len(dist_Matrix) > i:
         #check if the elements in the dist matrix are lists
         if isinstance(dist_Matrix[i], list) == False:
