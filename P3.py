@@ -46,9 +46,19 @@ def ComputeDistMatrix(dict_alignedSequences):
         if isinstance(list(dict_alignedSequences.values())[i][0], str) == False or isinstance(list(dict_alignedSequences.values())[i][1], str) == False:
             check = False
             break
+        
         #increment the counter for while loop
         i += 1
-    
+        
+    #3 Check sequences contain aligned DNA and are of equal length
+    for key in dict_alignedSequences:
+        if is_aligned_dna(dict_alignedSequences[key][0]) == False or is_aligned_dna(dict_alignedSequences[key][1]) == False:
+            check = False
+            break
+        if len(dict_alignedSequences[key][0]) != len(dict_alignedSequences[key][1]):
+            check = False
+            break
+            
     #final evalauation if data is usable
     if check == False:
         raise TypeError ('malformed input')
@@ -153,4 +163,27 @@ def calculate_distance(seq1,seq2):
         pcorr = (-3/4)*np.log(1-((4/3)*p))
     
     return(pcorr)
+
+def is_aligned_dna(sequence):
+    """
+    Checks if the length of a string is 0 when all DNA bases are removed.
+
+    Parameters
+    ----------
+    sequence : string of DNA
+
+    Returns
+    -------
+    bool
+        True if len(seq) == 0
+        otherwise False 
+
+    """
+    #ensure that the given sequence is uppercase
+    sequence = sequence.upper()
     
+    #replace all A C G and T and compare length with 0
+    if len(sequence.replace("A", "").replace("C", "").replace("G","").replace("T","").replace("-","")) == 0:
+        return True
+    else:
+        return False

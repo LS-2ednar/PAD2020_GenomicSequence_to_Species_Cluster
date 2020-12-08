@@ -44,7 +44,13 @@ def Cluster(dist_Matrix, labels):
                 check = False
                 break
         i += 1
-        
+    
+    #Check list dimensions
+    for lis in dist_Matrix:
+        if len(lis) != len(dist_Matrix):
+            check = False
+            break
+    
     if check == False:
         raise TypeError ('malformed input')
     
@@ -57,8 +63,6 @@ def Cluster(dist_Matrix, labels):
     #Cluster the binary tree together
     while len(ClusterDict)>2:
         #find minimum
-        # print(len(ClusterDict))
-        
         n,m = dict_min(ClusterDict)
         #recalculate Vlaues
         recalc_dict(ClusterDict,n,m)
