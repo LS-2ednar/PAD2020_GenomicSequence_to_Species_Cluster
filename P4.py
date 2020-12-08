@@ -29,16 +29,18 @@ def Cluster(dist_Matrix, labels):
     if isinstance(dist_Matrix, list) == False:
         check = False
     
+    #check of dist Matrix is equal to the length of labels
     if len(dist_Matrix) != len(labels):
         check = False
-        
+    #check every entry in the distmatrix
     while len(dist_Matrix) > i:
+        #check if the elements in the dist matrix are lists
         if isinstance(dist_Matrix[i], list) == False:
             check = False
             break
+        #check if the elements in the lists are floats
         for n in range(len(dist_Matrix[i])):
             if isinstance(dist_Matrix[i][n], float) == False:
-                print(dist_Matrix[i][n])
                 check = False
                 break
         i += 1

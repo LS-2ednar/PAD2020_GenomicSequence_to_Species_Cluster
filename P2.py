@@ -201,7 +201,7 @@ def alline(matrix, tbmat, seq1, seq2):
 def print_matrix(matrix):
     """
     Trys to print each line of a matrix in a nice format otherwise it prints 
-    each line (utility function)
+    each line (utility)
 
     Parameters
     ----------
@@ -213,6 +213,7 @@ def print_matrix(matrix):
     matrix: the given input Matrix
 
     """
+    #try to print matrix nicely
     try:
         for line in matrix:
             pline =[]
@@ -220,14 +221,8 @@ def print_matrix(matrix):
                 pline.append('%3.3f' % element)
             print(pline)
         return(matrix)
+    #if it did not work the matrix is linewise printed
     except:
         for line in matrix:
             print(line)
     return(matrix)
-
-"""
-Test
-"""
-import P1
-a = P1.ParseSeqFile('sequencefile.txt')  
-AlignByDP(a)

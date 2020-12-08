@@ -57,7 +57,7 @@ def is_dna(sequence):
 
     Parameters
     ----------
-    sequence : string
+    sequence : string of DNA
 
     Returns
     -------
@@ -68,6 +68,8 @@ def is_dna(sequence):
     """
     #ensure that the given sequence is uppercase
     sequence = sequence.upper()
+    
+    #replace all A C G and T and compare length with 0
     if len(sequence.replace("A", "").replace("C", "").replace("G","").replace("T","")) == 0:
         return True
     else:
@@ -75,7 +77,7 @@ def is_dna(sequence):
     
 def get_labels(returnlist):
     """
-    Function to get all labels in a order for later use in P4
+    Function to get all labels in a order for later use in P4 (utility)
 
     Parameters
     ----------

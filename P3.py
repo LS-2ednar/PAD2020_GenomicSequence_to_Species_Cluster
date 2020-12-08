@@ -53,13 +53,18 @@ def ComputeDistMatrix(dict_alignedSequences):
     if check == False:
         raise TypeError ('malformed input')
     
+    #get number of sequences
     matrixdim = howmany_sequences(dict_alignedSequences)
+    #initialize dist matrix
     distMatrix = init_Dist_Matrix(matrixdim)
+    
+    
     for i in dict_alignedSequences.keys():
-            
+        # useing the key i to get the corisponding aligned sequences 
         seq = dict_alignedSequences[i]
-        
+        #calculate distances between the sequences
         distance = calculate_distance(seq[0],seq[1])
+        #markdown result at the corrsiponding place in the distmatrix
         distMatrix[i[0]][i[1]] = distance
         distMatrix[i[1]][i[0]] = distance
     
@@ -80,10 +85,13 @@ def howmany_sequences(listOfTuples):
         Number of compared Sequences
 
     """
+    #initialize number of pairs as 0
     pairs = 0
+    #count pairs
     for n in listOfTuples:
         pairs += 1
-    k = 1    
+    k = 1
+    #find number of initial sequences    
     while k*(k-1) != pairs*2:
         k += 1
     return(k)
@@ -128,14 +136,17 @@ def calculate_distance(seq1,seq2):
         Calculated distance value.
     """
     mmcounter = 0 #mismatchcount
-    seqlen = 0
+    seqlen = 0 #sequence length
     
+    #cout the sequence length and mismatches
     for i in range(len(seq1)):
         if seq1[i]!='-' and seq2[i]!='-':
             seqlen += 1
             if seq1[i] != seq2[i]:
                 mmcounter += 1
+    #compute p
     p = (mmcounter/seqlen)
+    #adjust p 
     if p >= 0.75:
         pcorr = float(30)
     else:
