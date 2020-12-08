@@ -2,15 +2,12 @@
 
 This project is my very first GitHub upload :-D the project useses a dynamic programming approach to get the job done. will ultimatly have 4 functions according to the following discription:
 
+P1.py reads a file which and gets labels and DNA sequences out of this file in form of a list of tuples, where the first element of the tuple is a label and the second is a DNA sequence. 
 
-In this project you will implement a program that reads genomics sequences from a file and clusters them in a tree according to their pairwise evolutionary distances. 
-No prior knowledge on genomics is necessary. 
-The project has four main parts (P1—P4). 
-P1 and P3 are relatively straightforward. 
-P4 is a little bit more difficult. 
-P2 is challenging. 
-Each part should be encapsulated in a module, with respective names
-P1.py, P2.py, P3.py, P4.py
+P2.py alignes the different sequences in pairs, where gaps might be introduced based on a calculation method. Further, the aligend sequences are saved in a dictonary with keys which are tuples with integers representing the sequence pairs and values as tuples with strings containing the aligned DNA sequences.
 
+P3.py calculates a distance matrix where each aligned DNA pair results in an entriy in a matrix (list of list of floats) where the resulting values are saved.
 
-'ONE month for finalising and improveing the code'
+P4.py with the distance matrix and a list of labels a binary tree can be formed in a sting with parentesis.
+
+This project was realy fun to work on and continued to give valueable insides to the world of programming.
