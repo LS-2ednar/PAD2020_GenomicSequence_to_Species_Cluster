@@ -2,18 +2,18 @@ import os
 
 def ParseSeqFile(File):
     """
-    Parses a Sequence File by selecting only correct datainput and returns a 
-    list of tuples containing the species and the dna sequence.
+    Parses a sequencefile and returns a list of tuples containing the species 
+    and the dna sequence. For Parsing, the Data needs to start with ">" and there 
+    needs to be whitespace between the species and the following dna sequence.
 
     Parameters
     ----------
-    File : Paht to sequence file in string format
-        For Parsing, the Data needs to start with > and there needs to be 
-        whitespace between the species and the following dna sequence.
+    File : Paht to sequencefile in string format
+        
 
     Returns
     -------
-    returnlist : list of tuples with species and corrsiponding dna sequence
+    returnlist : list of tuples with species and corresponding dna sequence
     """
     #input checks
     if os.path.isfile(File) != True:

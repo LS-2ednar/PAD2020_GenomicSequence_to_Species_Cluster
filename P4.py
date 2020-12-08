@@ -2,8 +2,8 @@ from collections import defaultdict
 
 def Cluster(dist_Matrix, labels):
     """
-    Cluster the different Labels are put in a binary tree in string format 
-    based on distance Matrix
+    Cluster the different Labels and put them in a binary tree in string
+    format based on distance Matrix.
     Parameters
     ----------
     dist_Matrix : list of lists of floats
@@ -25,8 +25,10 @@ def Cluster(dist_Matrix, labels):
     #check of dist Matrix is equal to the length of labels
     if len(dist_Matrix) != len(labels):
         check = False
+        
+    #initialize counter     
+    i = 0    
     #check every entry in the distmatrix
-    i = 0 # initialize counter
     while len(dist_Matrix) > i:
         #check if the elements in the dist matrix are lists
         if isinstance(dist_Matrix[i], list) == False:
@@ -72,7 +74,7 @@ def Cluster(dist_Matrix, labels):
 
 def dict_min(ClusterDict):
     """
-    Returns the two labels which need to be connected with each other
+    Returns the two keys which indicate the global minimum inside of a dict of dicts
     Parameters
     ----------
     ClusterDict : 2D dict containing the values of the ComputedDistMatrix
@@ -105,7 +107,7 @@ def dict_min(ClusterDict):
 
 def recalc_dict(ClusterDict,n,m):
     """
-    Returns the recalucated clusterdict
+    Returns the recalucated clusterdict with a new shape due to modifing unneeded elements in each dict
     Parameters
     ----------
     ClusterDict     : 2D dict containing the values of a Matrix with Corrisponding Keys
@@ -113,7 +115,7 @@ def recalc_dict(ClusterDict,n,m):
     n & m           : keys to the ClusterDict where n is the primary and m the secondary key
     Returns
     ------- 
-    newClusterDict  : recalculated ClusterDict
+    ClusterDict     : recalculated ClusterDict
 
     """ 
     #generate new key

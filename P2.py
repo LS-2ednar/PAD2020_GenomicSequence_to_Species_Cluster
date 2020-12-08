@@ -4,16 +4,16 @@ import copy
 def AlignByDP(listOfTuples):
     """
     Alinges all DNA sequences in a list of tuples which eachother and returns
-    a dictionary with the keys of the combined sequences and the corsiponding
+    a dictionary with the keys of the combined sequences and the corresponding
     aligned to onanother DNA sequences
     Parameters
     ----------
     listOfTuples : A list of Tuples 
-        First element is a label secnond a DNA-sequence.
+        First element is a label second a DNA-sequence.
     Returns
     -------
-    A dictionary with tuples of the indices for the aligned dna sequences and
-    the aligned dna sequnece as tuples.
+    returndict: A dictionary with tuples of the indices for the aligned dna sequences and
+                the aligned dna sequnece as tuples.
     """
     #Check if listOfTuples is a list of tuples with strings and DNA
     check = True 
@@ -53,7 +53,7 @@ def AlignByDP(listOfTuples):
 
 def scoring_matrix(seq1, seq2):
     """
-    Takes two DNA sequences and creates a corsiponding a scoring and a 
+    Takes two DNA sequences and creates a corresponding a scoring and a 
     trackback matrix, aswell as modified DNA-Sequence1 and DNA-Sequence2
 
     Parameters

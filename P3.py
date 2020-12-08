@@ -3,13 +3,12 @@ import numpy as np
 def ComputeDistMatrix(dict_alignedSequences):
     """
     Useing a given dict with keys containing aligned sequences numbers 
-    (integers)and vlaues which are aligned DNA-sequences (strings) compute
-    a distance matrix as a list of lists of floats
+    (integers) and values which are aligned DNA-sequences (strings) to
+    compute a distance matrix as a list of lists of floats
 
     Parameters
     ----------
     dict_alignedSequences : dict{(int1,int2): (aSeq1, aSeq2)}
-        DESCRIPTION.
 
     Returns
     -------
@@ -100,7 +99,7 @@ def howmany_sequences(listOfTuples):
 
 def init_Dist_Matrix(length):
     """
-    initialies a distance matrix containing notthing but 0.0
+    Initialies a distance matrix containing nothing but 0.0
 
     Parameters
     ----------
@@ -123,8 +122,8 @@ def init_Dist_Matrix(length):
 
 def calculate_distance(seq1,seq2):
     """
+    Calculates the distance between two sequences
     
-
     Parameters
     ----------
     seq1 : string
@@ -158,7 +157,7 @@ def calculate_distance(seq1,seq2):
 
 def is_aligned_dna(sequence):
     """
-    Checks if the length of a string is 0 when all DNA bases are removed.
+    Checks if the length of a string is 0 when all DNA bases and '-' are removed.
 
     Parameters
     ----------
